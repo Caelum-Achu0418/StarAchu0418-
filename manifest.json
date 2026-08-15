@@ -1,24 +1,13 @@
 {
-  "name": "StarAchu · Plume",
-  "short_name": "StarAchu",
-  "start_url": "./",
-  "scope": "./",
+  "name": "羽雪机",
+  "short_name": "羽雪机",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#eef4f9",
   "theme_color": "#7fb2dd",
   "orientation": "portrait",
   "icons": [
-    {
-      "src": "https://cdn.jsdelivr.net/gh/rainmow52000/plume@a75300114cf82bc1de5912d3402ae00126f25e5a/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "https://cdn.jsdelivr.net/gh/rainmow52000/plume@a75300114cf82bc1de5912d3402ae00126f25e5a/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
   ]
 }
