@@ -1,0 +1,24 @@
+name: Verify Virtual Phone
+
+on:
+  push:
+    branches: [virtual-phone]
+    paths:
+      - '.github/workflows/verify-virtual-phone.yml'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: virtual-phone
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+        env:
+          NEXT_PUBLIC_SELF_HOSTED_MODE: 'true'
