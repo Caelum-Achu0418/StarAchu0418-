@@ -1,0 +1,54 @@
+name: Sync Plume source
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'proactive.js'
+      - '.github/workflows/sync-plume.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download upstream Plume
+        run: |
+          curl -L --fail https://raw.githubusercontent.com/rainmow52000/plume/main/index.html -o index.html
+          curl -L --fail https://raw.githubusercontent.com/rainmow52000/plume/main/manifest.json -o manifest.json
+          curl -L --fail https://raw.githubusercontent.com/rainmow52000/plume/main/sw.js -o sw.js
+          curl -L --fail https://raw.githubusercontent.com/rainmow52000/plume/main/icon-192.png -o icon-192.png
+          curl -L --fail https://raw.githubusercontent.com/rainmow52000/plume/main/icon-512.png -o icon-512.png
+
+      - name: Add proactive message extension
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          tag = '<script src="proactive.js"></script>'
+          if tag not in s:
+              if '</body>' in s:
+                  s = s.replace('</body>', tag + '\n</body>', 1)
+              else:
+                  s += '\n' + tag + '\n'
+          p.write_text(s, encoding='utf-8')
+          PY
+
+      - name: Keep site files on main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html manifest.json sw.js icon-192.png icon-512.png
+          if git diff --cached --quiet; then
+            echo "Already synced"
+          else
+            git commit -m "Sync Plume and enable proactive messages"
+            git push
+          fi
